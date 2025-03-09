@@ -1,6 +1,5 @@
 # TODO:
 # - Expr(:incomplete) for the REPL
-# - multiple digit numbers
 
 stacker_parser(text::Union{Core.SimpleVector,String}, filename::String, lineno, offset, options) =
     let stack = []
@@ -14,10 +13,14 @@ stacker_parser(text::Union{Core.SimpleVector,String}, filename::String, lineno, 
 
             # If number, add to stack
             elseif isdigit(c)
-                num = parse(Int, c)
-                push!(stack, num)
+                num_str = ""
+                while offset <= length(text) && isdigit(text[offset])
+                    num_str *= text[offset]
+                    offset += 1
+                end
 
-                offset += 1
+                num = parse(Int, num_str)
+                push!(stack, num)
 
             # If operator (+ or *), pop top two elements from stack and build Expr
             elseif c in ('+', '*')
