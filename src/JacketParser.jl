@@ -8,7 +8,11 @@ restore_julia_parser() = begin
 end
 
 get_parser_for(str) =
-    nothing
+    if str == "stacker"
+        stacker_parser
+    else
+        nothing
+    end
 
 lang_parser(text::Union{Core.SimpleVector,String}, filename::String, lineno, offset, options) =
     # Does the file start with #lang:<language>?
